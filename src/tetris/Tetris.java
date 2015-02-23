@@ -1,17 +1,16 @@
 package tetris;
 
-import tetris.tetriminos.Tetriminos;
-import tetris.tetriminos.TetriminosFactory;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.lang.reflect.InvocationTargetException;
 
 /**
  *
  * Created by kashey on 2/21/15.
  */
-public class Tetris extends JApplet {
+public class Tetris extends JPanel{
+    JFrame mainFrame;
 
     static Tetris tetris;
     private PlayThread t;
@@ -21,56 +20,103 @@ public class Tetris extends JApplet {
     private Font pauseFont = new Font("SHERIF", Font.BOLD, 50);
     private Font defaultFont;
 
-    private Color backgroundColor = new Color(71, 70, 71);
-
-// If i want run app in the window
-//    public static void main(String[] args) {
-//
-//        // create and set up the applet
-//        Tetris applet = new Tetris();
-//        applet.setPreferredSize(new Dimension(540, 420));
-//        applet.init();
-//
-//        // create a frame to host the applet, which is just another type of Swing Component
-//        JFrame mainFrame = new JFrame();
-//        mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-//
-//        // add the applet to the frame and show it
-//        mainFrame.add(applet);
-//        mainFrame.pack();
-//        mainFrame.setVisible(true);
-//
-//        // start the applet
-//        applet.start();
-//    }
+    private Color fieldBackgroundColor = new Color(71, 70, 71);
+    private Color areaBackgroundColor = new Color(43, 43, 43);
 
 
-
-    public void init(){
-        // If i want run app in the window
-//        try {
-//            SwingUtilities.invokeAndWait(new Runnable() {
-//                public void run() {
-//                   makeGUI();
-//                }
-//            });
-//        } catch (Exception e) {
-//            System.err.println("createGUI didn't complete successfully");
-//        }
-        // If i want run like Applet
-        makeGUI();
+    public Tetris() {
         tetris = this;
-        defaultFont = tetris.getFont();
+        setPreferredSize(new Dimension(540, 420));
+        setFocusable(true);
+        makeGUI();
+        defaultFont = getFont();
 
         t = new PlayThread();
         t.start();
     }
 
+    public static void main(String[] args) {
+        try {
+            SwingUtilities.invokeAndWait(() -> new Tetris());
+        } catch (InterruptedException | InvocationTargetException e) {
+            e.printStackTrace();
+        }
+    }
+
     private void makeGUI(){
-        setSize(new Dimension(540, 420));
-        //Настройка аплета для использования компоновки потоков.
-//        setLayout(new FlowLayout());
-        setFocusable(true);
+
+        mainFrame = new JFrame();
+        mainFrame.setLayout(new FlowLayout());
+        mainFrame.setSize(new Dimension(540, 460));
+        mainFrame.setMinimumSize(new Dimension(540, 460));
+        mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        mainFrame.add(this);
+
+//        JButton leftButton = new JButton("LEFT");
+//        leftButton.addActionListener(new ActionListener() {
+//            @Override
+//            public void actionPerformed(ActionEvent e) {
+//
+//            }
+//        });
+//        mainFrame.add(leftButton);
+//
+//        JButton rightButton = new JButton("RIGHT");
+//        rightButton.addActionListener(new ActionListener() {
+//            @Override
+//            public void actionPerformed(ActionEvent e) {
+//
+//            }
+//        });
+//        mainFrame.add(rightButton);
+
+//        JButton upButton = new JButton("ANTICLOCKWISE_ROTATION");
+//        upButton.addActionListener(new ActionListener() {
+//            @Override
+//            public void actionPerformed(ActionEvent e) {
+//
+//            }
+//        });
+//        mainFrame.add(upButton);
+//
+//        JButton downButton = new JButton("CLOCKWISE_ROTATION");
+//        downButton.addActionListener(new ActionListener() {
+//            @Override
+//            public void actionPerformed(ActionEvent e) {
+//
+//            }
+//        });
+//        mainFrame.add(downButton);
+//
+//        JButton spaceButton = new JButton("DROP");
+//        spaceButton.addActionListener(new ActionListener() {
+//            @Override
+//            public void actionPerformed(ActionEvent e) {
+//
+//            }
+//        });
+//        mainFrame.add(spaceButton);
+//
+//        JButton pauseButton = new JButton("PAUSE");
+//        pauseButton.addActionListener(new ActionListener() {
+//            @Override
+//            public void actionPerformed(ActionEvent e) {
+//
+//            }
+//        });
+//        mainFrame.add(pauseButton);
+//
+//        JButton escButton = new JButton("ESC");
+//        escButton.addActionListener(new ActionListener() {
+//            @Override
+//            public void actionPerformed(ActionEvent e) {
+//
+//            }
+//        });
+//        mainFrame.add(escButton);
+        mainFrame.pack();
+        mainFrame.setVisible(true);
+
 
         addKeyListener(new KeyAdapter() {
             @Override
@@ -98,13 +144,11 @@ public class Tetris extends JApplet {
                         //If "PAUSE" pause the game
                     else if (e.getKeyCode() == KeyEvent.VK_PAUSE) {
                         if (!isStopped) {
-                            showStatus("pause");
                             isStopped = true;
-                            stop();
+                            t.suspend();
                         } else {
-                            showStatus("game");
                             isStopped = false;
-                            start();
+                            t.resume();
                         }
                     }
                 }
@@ -114,25 +158,18 @@ public class Tetris extends JApplet {
     }
 
     @Override
-    public void stop() {
-        super.stop();
-        t.suspend();
-    }
+    public void paintComponent(Graphics g) {
+        super.paintComponent(g);
 
-    @Override
-    public void start() {
-        super.start();
-        t.resume();
-    }
-
-    @Override
-    public void paint(Graphics g) {
+        g.setColor(areaBackgroundColor);
+        g.fillRect(0, 0, getWidth(), getHeight());
 
         g.setColor(Color.blue);
         g.drawLine(8, 10, 8, 412);
         g.drawLine(212, 10, 212, 412);
         g.drawLine(8, 412, 212, 412);
-        g.setColor(backgroundColor);
+
+        g.setColor(fieldBackgroundColor);
         g.fillRect(10, 0, 201, 411);
 
         for (int y = 2; y < PlayThread.SIDE_Y - 1; y++) {
@@ -154,7 +191,7 @@ public class Tetris extends JApplet {
                             break;
                         case '6' : g.setColor(Color.RED);
                             break;
-                        default: g.setColor(backgroundColor);
+                        default: g.setColor(fieldBackgroundColor);
                     }
                     g.drawRect(10 + (x - 2) * 20, 10 + (y - 2) * 20, 20, 20);
                     g.fillRect(10 + (x - 2) * 20 + 3, 10 + (y - 2) * 20 + 3, 17, 17);
@@ -167,36 +204,36 @@ public class Tetris extends JApplet {
                 int x = c.getX();
                 int y = c.getY();
                 char cross = PlayThread.getFalling().TETRIMINOS_CHAR;
-                    switch (cross) {
-                        case '0':
-                            g.setColor(Color.MAGENTA);
-                            break;
-                        case '1':
-                            g.setColor(Color.BLUE);
-                            break;
-                        case '2':
-                            g.setColor(Color.ORANGE);
-                            break;
-                        case '3':
-                            g.setColor(Color.YELLOW);
-                            break;
-                        case '4':
-                            g.setColor(Color.GREEN);
-                            break;
-                        case '5':
-                            g.setColor(Color.CYAN);
-                            break;
-                        case '6':
-                            g.setColor(Color.RED);
-                            break;
-                        default:
-                            g.setColor(backgroundColor);
-                    }
+                switch (cross) {
+                    case '0':
+                        g.setColor(Color.MAGENTA);
+                        break;
+                    case '1':
+                        g.setColor(Color.BLUE);
+                        break;
+                    case '2':
+                        g.setColor(Color.ORANGE);
+                        break;
+                    case '3':
+                        g.setColor(Color.YELLOW);
+                        break;
+                    case '4':
+                        g.setColor(Color.GREEN);
+                        break;
+                    case '5':
+                        g.setColor(Color.CYAN);
+                        break;
+                    case '6':
+                        g.setColor(Color.RED);
+                        break;
+                    default:
+                        g.setColor(fieldBackgroundColor);
+                }
                 g.drawRect(10 + (x - 2) * 20, 10 + (y - 2) * 20, 20, 20);
                 g.fillRect(10 + (x - 2) * 20 + 3, 10 + (y - 2) * 20 + 3, 17, 17);
             }
         }
-        g.setColor(backgroundColor);
+        g.setColor(fieldBackgroundColor);
         g.fillRect(300, 50, 90, 90);
 
         g.setColor(Color.blue);
@@ -227,7 +264,7 @@ public class Tetris extends JApplet {
                             g.setColor(Color.RED);
                             break;
                         default:
-                            g.setColor(backgroundColor);
+                            g.setColor(fieldBackgroundColor);
                     }
                     g.drawRect(305 + nextX * 20, 55 + nextY * 20, 20, 20);
                     g.fillRect(305 + nextX * 20 + 3, 55 + nextY * 20 + 3, 17, 17);
@@ -256,6 +293,4 @@ public class Tetris extends JApplet {
             setFont(defaultFont);
         }
     }
-
-
 }
