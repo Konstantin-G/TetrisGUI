@@ -7,7 +7,7 @@ import java.lang.reflect.InvocationTargetException;
 
 /**
  *
- * Created by kashey on 2/21/15.
+ * Created by Konstantin Garkusha on 2/21/15.
  */
 public class Tetris extends JPanel{
     JFrame mainFrame;
