@@ -1,0 +1,25 @@
+*.class
+
+# Package Files #
+*.war
+*.ear
+*.jar
+
+
+# Eclipse
+.settings/
+.prefs
+*.prefs
+
+# Intellij
+.idea/
+*.iml
+*.iws
+
+# Mac
+.DS_Store
+
+# Maven
+log/
+target/
+out/
