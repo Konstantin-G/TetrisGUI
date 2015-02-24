@@ -16,7 +16,7 @@ public abstract class Tetriminos implements Movable{
 
     int originX;
     int originY;
-    int position;
+    private int position;
 
     Tetriminos(int position, char tetriminosChar) {
         this.position = position;
@@ -47,7 +47,7 @@ public abstract class Tetriminos implements Movable{
                 this.position++;
             } else
                 this.position = 0;
-        } else if("ANTICLOCKWISE".equals(direction)) {
+        } else if("COUNTERCLOCKWISE".equals(direction)) {
             if (this.position != 0) {
                 this.position--;
             } else
@@ -56,6 +56,10 @@ public abstract class Tetriminos implements Movable{
         //set new position
         rotate();
     }
+    protected abstract void setPosition0();
+    protected abstract void setPosition1();
+    protected abstract void setPosition2();
+    protected abstract void setPosition3();
 
     //set new position (rotate to new or previous position)
     synchronized void rotate(){

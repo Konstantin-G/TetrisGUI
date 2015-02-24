@@ -5,10 +5,7 @@ package tetris.tetriminos;
  *
  */
 interface Movable {
-    public void setPosition0();
-    public void setPosition1();
-    public void setPosition2();
-    public void setPosition3();
+    public void rotateDirection(String direction);
 
     public void moveDownPerCell();
     public void moveToLeft();

@@ -20,13 +20,7 @@ class I extends Tetriminos {
     }
 
     @Override
-    public void rotateDirection(String direction) {
-        position = position == 0 ? 1 : 0;
-        rotate();
-    }
-
-    @Override
-    public synchronized void setPosition0(){
+    protected synchronized void setPosition0(){
         if (!(PlayThread.MATRIX[originY][this.originX + 2] != ' ' && PlayThread.MATRIX[originY][originX] != ' ')) {
             if (PlayThread.MATRIX[originY][this.originX + 2] != ' ') {
                 this.moveToLeft();
@@ -45,7 +39,7 @@ class I extends Tetriminos {
     }
 
     @Override
-    public synchronized void setPosition1(){
+    protected synchronized void setPosition1(){
         if (!(PlayThread.MATRIX[originY][originX + 3] != ' ' && PlayThread.MATRIX[originY][originX] != ' ')) {
             if (PlayThread.MATRIX[originY][originX + 3] != ' ') {
                 this.moveToLeft();
@@ -68,11 +62,11 @@ class I extends Tetriminos {
 
     @Override
     public void setPosition2() {
-
+        setPosition0();
     }
 
     @Override
     public void setPosition3() {
-
+        setPosition1();
     }
 }

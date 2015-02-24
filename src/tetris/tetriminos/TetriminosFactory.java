@@ -9,7 +9,7 @@ import java.util.concurrent.ArrayBlockingQueue;
  */
 public class TetriminosFactory {
     //Storing Tetriminos here
-    private static final Queue<Tetriminos> TETRIMINOS_QUEUE = new ArrayBlockingQueue<Tetriminos>(2);
+    private static final Queue<Tetriminos> TETRIMINOS_QUEUE = new ArrayBlockingQueue<>(2);
 
     // Do we have Tetriminos in
     public boolean hasTetriminos() {

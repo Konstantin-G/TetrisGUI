@@ -25,21 +25,21 @@ class O extends Tetriminos {
 
     @Override
     public void setPosition0() {
-
+        // do nothing this tetriminos can't rotate
     }
 
     @Override
     public void setPosition1() {
-
+        // do nothing this tetriminos can't rotate
     }
 
     @Override
     public void setPosition2() {
-
+        // do nothing this tetriminos can't rotate
     }
 
     @Override
     public void setPosition3() {
-
+        // do nothing this tetriminos can't rotate
     }
 }

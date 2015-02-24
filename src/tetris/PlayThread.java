@@ -15,7 +15,7 @@ import java.util.Map;
  * ===============================
  */
 public class PlayThread extends Thread {
-    private static final Map<Integer, Integer> LEVEL_SPEED = new HashMap<Integer, Integer>(20);
+    private static final Map<Integer, Integer> LEVEL_SPEED = new HashMap<>(20);
     static {
         for (int level = 0; level < 20; level++) {
             LEVEL_SPEED.put(level, 790 - level * 40);
@@ -85,7 +85,7 @@ public class PlayThread extends Thread {
                 }
                 // fall tetriminos down per cell (one step)
                 falling.moveDownPerCell();
-                Tetris.tetris.repaint();
+                Tetris.basicPanel.repaint();
             }
             //add fallen tetriminos to the MATRIX
             for (int coord = 0; coord < falling.coordinates.length; coord++) {
@@ -152,7 +152,7 @@ public class PlayThread extends Thread {
                 }
                 countOfFilledLine++;
                 // Waiting (for animation)
-                Tetris.tetris.repaint();
+                Tetris.basicPanel.repaint();
                 Thread.sleep(700);
                 //  Delete the line and fall down all above this line
                 deleteTheLine(y);
@@ -182,7 +182,7 @@ public class PlayThread extends Thread {
         for (int y = line; y > 0 ; y--) {
             // Falling one square down a line
             System.arraycopy(MATRIX[y - 1], 2, MATRIX[y], 2, SIDE_X - 2);
-            Tetris.tetris.repaint();
+            Tetris.basicPanel.repaint();
             // Check next line for the void, if true = break
             int count = 0;
             for (int x = 2; x < SIDE_X - 2; x++) {
@@ -197,7 +197,7 @@ public class PlayThread extends Thread {
         }
     }
 
-    public static void fillNextTetriminos(){
+    private static void fillNextTetriminos(){
         char cross = ' ';
         for (int y = 0; y < 4; y++) {
             for (int x = 0; x < 4; x++) {
