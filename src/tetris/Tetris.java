@@ -120,6 +120,14 @@ public class Tetris extends JFrame{
         setLocationRelativeTo(null);
     }
 
+    private void loadGame(){
+        // will be
+    }
+
+    private void saveGame(){
+        // will be
+    }
+
     private void makeGUI(){
         /**MAIN panel*/
         basicPanel = new JPanel(new BorderLayout());
@@ -129,8 +137,14 @@ public class Tetris extends JFrame{
         /**MENUBAR panel*/
         JMenuBar menubar = new JMenuBar();
         menubar.setBackground(new Color(102, 102, 102));
-        JMenu menu = new JMenu("Menu");
+        JMenu fileMenu = new JMenu("File");
+        JMenu helpMenu = new JMenu("Help");
 
+        JMenuItem loadGame = new JMenuItem("Load");
+        loadGame.addActionListener(e -> loadGame());
+
+        JMenuItem saveGame = new JMenuItem("Save");
+        saveGame.addActionListener(e -> saveGame());
 
         JMenuItem exit = new JMenuItem("Exit");
         exit.addActionListener(e -> System.exit(0));
@@ -144,12 +158,15 @@ public class Tetris extends JFrame{
         JMenuItem info = new JMenuItem("About Tetris");
         info.addActionListener(e -> aboutTetrisFrame());
 
-        menu.add(restart);
-        menu.add(help);
-        menu.add(info);
-        menu.add(exit);
+        fileMenu.add(loadGame);
+        fileMenu.add(saveGame);
+        fileMenu.add(restart);
+        helpMenu.add(help);
+        helpMenu.add(info);
+        fileMenu.add(exit);
 
-        menubar.add(menu);
+        menubar.add(fileMenu);
+        menubar.add(helpMenu);
         setJMenuBar(menubar);
 
 
