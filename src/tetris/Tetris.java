@@ -3,11 +3,19 @@ package tetris;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.io.File;
+import java.io.IOException;
+import java.net.URISyntaxException;
+import java.util.ArrayList;
 
 /**
  *
  * Created by Konstantin Garkusha on 2/21/15.
+ * ===============================
+ * | Game is under construction! |
+ * ===============================
  */
+
 public class Tetris extends JFrame{
     public static JPanel basicPanel;
     static JPanel leftPanel;
@@ -38,12 +46,65 @@ public class Tetris extends JFrame{
         SwingUtilities.invokeLater(() -> new Tetris());
     }
 
-    private void makeHelpFrame(){
+    private void helpFrame(){
         JFrame helpFrame = new JFrame();
         helpFrame.setTitle("Help");
-//        helpFrame.pack();
-        helpFrame.setSize(SCREEN_SIZE);
+        helpFrame.pack();
+//        helpFrame.setSize(SCREEN_SIZE);
         helpFrame.setResizable(false);
+        helpFrame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+        helpFrame.setVisible(true);
+        setLocationRelativeTo(null);
+    }
+
+    private void restartApp()
+    {
+
+        final String javaBin = System.getProperty("java.home") + File.separator + "bin" + File.separator + "java";
+        try {
+            final File currentJar = new File(Tetris.class.getProtectionDomain().getCodeSource().getLocation().toURI());
+
+            // is it a jar file?
+            if(!currentJar.getName().endsWith(".jar"))
+                return;
+
+            // Build command: java -jar application.jar
+            final ArrayList<String> command = new ArrayList<String>();
+            command.add(javaBin);
+            command.add("-jar");
+            command.add(currentJar.getPath());
+
+            //build and start new command
+            final ProcessBuilder builder = new ProcessBuilder(command);
+            builder.start();
+        } catch ( IOException | URISyntaxException e) {
+            e.printStackTrace();
+        } finally {
+            System.exit(0);
+        }
+    }
+
+    private void aboutTetrisFrame(){
+        JFrame helpFrame = new JFrame();
+        helpFrame.setTitle("About Tetris");
+
+
+
+        JPanel textPanel = new JPanel(new BorderLayout());
+        textPanel.setBorder(BorderFactory.createEmptyBorder(15,15,15,15));
+        JTextPane textPane = new JTextPane();
+        textPane.setContentType("text/html");
+        String aboutTetris = PrepareInformation.getAboutTetris();
+        textPane.setText(aboutTetris);
+        textPane.setEditable(false);
+        // wrap JTextPane to the JScrollPane to add scrollable
+        JScrollPane jsp = new JScrollPane(textPane);
+        textPanel.add(jsp);
+        helpFrame.add(textPanel);
+
+        helpFrame.setPreferredSize(SCREEN_SIZE);
+        helpFrame.pack();
+//        helpFrame.setResizable(false);
         helpFrame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
         helpFrame.setVisible(true);
         setLocationRelativeTo(null);
@@ -63,10 +124,21 @@ public class Tetris extends JFrame{
 
         JMenuItem exit = new JMenuItem("Exit");
         exit.addActionListener(e -> System.exit(0));
-        menu.add(exit);
+
         JMenuItem help = new JMenuItem("Help");
-        help.addActionListener(e -> makeHelpFrame());
+        help.addActionListener(e -> helpFrame());
+
+        JMenuItem restart = new JMenuItem("Restart");
+        restart.addActionListener(e -> restartApp());
+
+        JMenuItem info = new JMenuItem("About Tetris");
+        info.addActionListener(e -> aboutTetrisFrame());
+
+        menu.add(restart);
         menu.add(help);
+        menu.add(info);
+        menu.add(exit);
+
         menubar.add(menu);
         setJMenuBar(menubar);
 
@@ -77,18 +149,23 @@ public class Tetris extends JFrame{
             protected void paintComponent(Graphics g) {
                 super.paintComponent(g);
 
+                final int START_X = 10;
+                final int START_Y = 10;
+
+                // Draw background area
                 g.setColor(AREA_BACKGROUND_COLOR);
                 g.fillRect(0, 0, leftPanel.getWidth(), leftPanel.getHeight());
 
+                // Draw 3D edging of Matrix
                 g.setColor(MATRIX3D_COLOR);
                 for (int i = 0; i < 5; i++) {
-                    g.drawLine(212 + i, 1 + i, 212 + i, 413 + i);
-                    g.drawLine(11 + i, 412 + i, 213 + i, 412 + i);
+                    g.drawLine(START_X + 202 + i, START_Y + 1 + i, START_X + 202 + i, START_Y + 413 + i);   //VerticalDirection
+                    g.drawLine(START_X + 1 + i, START_Y + 412 + i, START_X + 203 + i, START_Y + 412 + i);  //HorizontalDirection
                 }
 
                 g.setColor(MATRIX_BACKGROUND_COLOR);
-                g.fillRect(10, 0, 201, 411);
-
+                g.fillRect(START_X, START_Y, 201, 411);
+                // Draw The Matrix
                 for (int y = 2; y < PlayThread.SIDE_Y - 1; y++) {
                     for (int x = 2; x < PlayThread.SIDE_X - 2; x++) {
                         char cross = PlayThread.MATRIX[y][x];
@@ -110,12 +187,12 @@ public class Tetris extends JFrame{
                                     break;
                                 default: g.setColor(MATRIX_BACKGROUND_COLOR);
                             }
-                            g.drawRect(10 + (x - 2) * 20, 10 + (y - 2) * 20, 20, 20);
-                            g.fillRect(10 + (x - 2) * 20 + 3, 10 + (y - 2) * 20 + 3, 17, 17);
+                            g.drawRect(START_X + (x - 2) * 20, START_Y + 10 + (y - 2) * 20, 20, 20);
+                            g.fillRect(START_X + (x - 2) * 20 + 3, START_Y + 10+ (y - 2) * 20 + 3, 17, 17);
                         }
                     }
                 }
-
+                // Draw falling Tetriminos
                 if (null != PlayThread.getFalling()) {
                     for (Coordinates c : PlayThread.getFalling().coordinates) {
                         int x = c.getX();
@@ -146,11 +223,15 @@ public class Tetris extends JFrame{
                             default:
                                 g.setColor(MATRIX_BACKGROUND_COLOR);
                         }
-                        g.drawRect(10 + (x - 2) * 20, 10 + (y - 2) * 20, 20, 20);
-                        g.fillRect(10 + (x - 2) * 20 + 3, 10 + (y - 2) * 20 + 3, 17, 17);
+                        g.drawRect(START_X + (x - 2) * 20, START_Y  + 10 + (y - 2) * 20, 20, 20);
+                        g.fillRect(START_X + (x - 2) * 20 + 3, START_Y  + 10 + (y - 2) * 20 + 3, 17, 17);
                     }
                 }
+                //Draw hide line
+                g.setColor(AREA_BACKGROUND_COLOR);
+                g.fillRect(START_X, 0, 220, 10);
             }
+
         };
         leftPanel.add(Box.createRigidArea(new Dimension(220,0)));
         basicPanel.add(leftPanel,  BorderLayout.WEST);
