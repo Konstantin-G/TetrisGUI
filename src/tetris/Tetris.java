@@ -49,9 +49,21 @@ public class Tetris extends JFrame{
     private void helpFrame(){
         JFrame helpFrame = new JFrame();
         helpFrame.setTitle("Help");
+        // Text container
+        JPanel textPanel = new JPanel(new BorderLayout());
+        textPanel.setBorder(BorderFactory.createEmptyBorder(15,15,15,15));
+        JTextPane textPane = new JTextPane();
+        textPane.setContentType("text/html");
+        String help = PrepareInformation.getHelp();
+        textPane.setText(help);
+        textPane.setEditable(false);
+
+        textPanel.add(textPane);
+        helpFrame.add(textPanel);
+
+        // setup frame
+        helpFrame.setPreferredSize(SCREEN_SIZE);
         helpFrame.pack();
-//        helpFrame.setSize(SCREEN_SIZE);
-        helpFrame.setResizable(false);
         helpFrame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
         helpFrame.setVisible(true);
         setLocationRelativeTo(null);
@@ -87,9 +99,7 @@ public class Tetris extends JFrame{
     private void aboutTetrisFrame(){
         JFrame helpFrame = new JFrame();
         helpFrame.setTitle("About Tetris");
-
-
-
+        // Text container
         JPanel textPanel = new JPanel(new BorderLayout());
         textPanel.setBorder(BorderFactory.createEmptyBorder(15,15,15,15));
         JTextPane textPane = new JTextPane();
@@ -102,9 +112,9 @@ public class Tetris extends JFrame{
         textPanel.add(jsp);
         helpFrame.add(textPanel);
 
+        // setup frame
         helpFrame.setPreferredSize(SCREEN_SIZE);
         helpFrame.pack();
-//        helpFrame.setResizable(false);
         helpFrame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
         helpFrame.setVisible(true);
         setLocationRelativeTo(null);
