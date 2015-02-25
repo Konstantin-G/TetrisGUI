@@ -35,12 +35,7 @@ public class Tetris extends JFrame{
     }
 
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                new Tetris();
-            }
-        });
+        SwingUtilities.invokeLater(() -> new Tetris());
     }
 
     private void makeHelpFrame(){
@@ -86,12 +81,10 @@ public class Tetris extends JFrame{
                 g.fillRect(0, 0, leftPanel.getWidth(), leftPanel.getHeight());
 
                 g.setColor(MATRIX3D_COLOR);
-                g.drawLine(212, 0, 212, 412);
-                g.drawLine(213, 0, 213, 413);
-                g.drawLine(214, 0, 214, 414);
-                g.drawLine(10, 412, 212, 412);
-                g.drawLine(11, 413, 213, 413);
-                g.drawLine(12, 414, 214, 414);
+                for (int i = 0; i < 5; i++) {
+                    g.drawLine(212 + i, 1 + i, 212 + i, 413 + i);
+                    g.drawLine(11 + i, 412 + i, 213 + i, 412 + i);
+                }
 
                 g.setColor(MATRIX_BACKGROUND_COLOR);
                 g.fillRect(10, 0, 201, 411);
@@ -176,6 +169,11 @@ public class Tetris extends JFrame{
 
                 g.setColor(MATRIX_BACKGROUND_COLOR);
                 g.fillRect(10, 50, 90, 90);
+                g.setColor(MATRIX3D_COLOR);
+                for (int i = 0; i < 5; i++) {
+                    g.drawLine(101 + i, 51 + i, 101 + i, 141 + i);
+                    g.drawLine(11 + i, 141 + i, 101 + i, 141 + i);
+                }
 
                 g.setColor(Color.blue);
                 for (int nextY = 0; nextY < 4; nextY++) {
@@ -238,7 +236,6 @@ public class Tetris extends JFrame{
         rightPanel.add(rightTopPanel);
             /**RIGHT BOTTOM panel*/
 //        rightBottomPanel = new JPanel(new FlowLayout());
-//
 //        JTextPane jTextPane= new JTextPane();
 //        jTextPane.setContentType("text/text");
 //        jTextPane.setText("Press F1 to help");
@@ -251,7 +248,7 @@ public class Tetris extends JFrame{
 
 
         setTitle("Tetris game by Konstantin Garkusha");
-        pack();
+//        pack();
         setSize(SCREEN_SIZE);
         setResizable(false);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
