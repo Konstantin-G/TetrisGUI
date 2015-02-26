@@ -21,11 +21,11 @@ class T extends Tetriminos {
 
     @Override
     public synchronized void setPosition0(){
-        if (!(PlayThread.MATRIX[originY][this.originX + 2] != ' ' && PlayThread.MATRIX[originY][originX] != ' ')) {
-            if (PlayThread.MATRIX[originY][this.originX + 2] != ' ') {
+        if (!(PlayThread.matrix[originY][this.originX + 2] != ' ' && PlayThread.matrix[originY][originX] != ' ')) {
+            if (PlayThread.matrix[originY][this.originX + 2] != ' ') {
                 this.moveToLeft();
             }
-            if (PlayThread.MATRIX[originY][originX] != ' ') {
+            if (PlayThread.matrix[originY][originX] != ' ') {
                 this.moveToRight();
             }
 
@@ -44,11 +44,11 @@ class T extends Tetriminos {
 
     @Override
     public synchronized void setPosition1(){
-        if (!(PlayThread.MATRIX[originY][originX + 2] != ' ' && PlayThread.MATRIX[originY][originX] != ' ')) {
-            if (PlayThread.MATRIX[originY][originX + 2] != ' ') {
+        if (!(PlayThread.matrix[originY][originX + 2] != ' ' && PlayThread.matrix[originY][originX] != ' ')) {
+            if (PlayThread.matrix[originY][originX + 2] != ' ') {
                 this.moveToLeft();
             }
-            if (PlayThread.MATRIX[originY][originX] != ' ') {
+            if (PlayThread.matrix[originY][originX] != ' ') {
                 this.moveToRight();
             }
 
@@ -67,11 +67,11 @@ class T extends Tetriminos {
 
     @Override
     public synchronized void setPosition2(){
-        if (!(PlayThread.MATRIX[originY][originX + 1] != ' ' && PlayThread.MATRIX[originY][originX - 1] != ' ')) {
-            if (PlayThread.MATRIX[originY][originX + 1] != ' ') {
+        if (!(PlayThread.matrix[originY][originX + 1] != ' ' && PlayThread.matrix[originY][originX - 1] != ' ')) {
+            if (PlayThread.matrix[originY][originX + 1] != ' ') {
                 this.moveToLeft();
             }
-            if (PlayThread.MATRIX[originY][originX - 1] != ' ') {
+            if (PlayThread.matrix[originY][originX - 1] != ' ') {
                 this.moveToRight();
             }
 
@@ -90,11 +90,11 @@ class T extends Tetriminos {
 
     @Override
     public synchronized void setPosition3(){
-        if (!(PlayThread.MATRIX[originY][originX + 2] != ' ' && PlayThread.MATRIX[originY][originX] != ' ')) {
-            if (PlayThread.MATRIX[originY][originX + 2] != ' ') {
+        if (!(PlayThread.matrix[originY][originX + 2] != ' ' && PlayThread.matrix[originY][originX] != ' ')) {
+            if (PlayThread.matrix[originY][originX + 2] != ' ') {
                 this.moveToLeft();
             }
-            if (PlayThread.MATRIX[originY][originX] != ' ') {
+            if (PlayThread.matrix[originY][originX] != ' ') {
                 this.moveToRight();
             }
 

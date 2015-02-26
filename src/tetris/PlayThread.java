@@ -22,8 +22,8 @@ public class PlayThread extends Thread {
         }
     }
     public static final int SIDE_X = 10 + 4;                                 // 4 for walls
-    public static final int SIDE_Y = 20 + 2 + 1;                             // 2 are invisible and 1 to bottom
-    public static final char[][] MATRIX = new char[SIDE_Y][SIDE_X];
+    public static final int SIDE_Y = 20 + 2 + 1;                             // 2 are in the top and invisible and 1 to bottom
+    public static char[][] matrix = new char[SIDE_Y][SIDE_X];
 
     private static boolean isPlaying = true;
     private static Tetriminos falling;
@@ -32,7 +32,7 @@ public class PlayThread extends Thread {
     private static long speed;                                       // GameSpeed
     private static final long DROP_SPEED = 1;                       // Drop speed
 
-    private static final TetriminosFactory TETRIMINOS_FACTORY = new TetriminosFactory();
+    private static final TetriminosFactory TETRIMINOS_FACTORY = TetriminosFactory.getTetriminosInstance();
     private static final char[][] NEXT = new char[4][4];
 
     public static char[][] getNext() {
@@ -47,23 +47,29 @@ public class PlayThread extends Thread {
         return score;
     }
 
+    public static void setScore(int score) {
+        PlayThread.score = score;
+    }
+
     public static Tetriminos getFalling() {
         return falling;
+    }
+
+    public static void setFalling(Tetriminos falling) {
+        PlayThread.falling = falling;
     }
 
     public void run() {
 
         // make right matrix
         fillTheMatrix();
-        // Object to call TetriminosFactory methods
-        TetriminosFactory tetriminosFactory = new TetriminosFactory();
         //add first Tetriminos to queue
-        tetriminosFactory.addFirstTetriminos();
+        TETRIMINOS_FACTORY.addFirstTetriminos();
 
         // main logic
         while(isPlaying){
             // get next Tetriminos from queue
-            falling = tetriminosFactory.getTetriminosFromTop();
+            falling = TETRIMINOS_FACTORY.getTetriminosFromTop();
             fillNextTetriminos();
             //check game level
             level = getNewLevel();
@@ -87,14 +93,14 @@ public class PlayThread extends Thread {
                 falling.moveDownPerCell();
                 Tetris.basicPanel.repaint();
             }
-            //add fallen tetriminos to the MATRIX
+            //add fallen tetriminos to the matrix
             for (int coord = 0; coord < falling.coordinates.length; coord++) {
                 int x = falling.coordinates[coord].getX();
                 int y = falling.coordinates[coord].getY();
-                MATRIX[y][x] = falling.TETRIMINOS_CHAR;
+                matrix[y][x] = falling.TETRIMINOS_CHAR;
             }
             falling = null;
-            //Check the MATRIX for the filled lines
+            //Check the matrix for the filled lines
             try {
                 checkTheMatrix();
             } catch (InterruptedException e) {
@@ -103,7 +109,7 @@ public class PlayThread extends Thread {
 
             // If top line have tetriminos -> stop the game
             for (int x = 2; x < SIDE_X - 2; x++) {
-                if (MATRIX[2][x] != ' ') {
+                if (matrix[2][x] != ' ') {
                     // if have found stop the game and break the loop
                     isPlaying = false;
                     break;
@@ -112,24 +118,24 @@ public class PlayThread extends Thread {
         }
     }
 
-    //right fill the MATRIX
+    //right fill the matrix
     private static void fillTheMatrix(){                            //    ||    ||
         for (int y = 0; y < SIDE_Y; y++) {                          //    ||    ||
             for (int x = 2; x < SIDE_X - 2; x++) {                  //    ||    ||
-                MATRIX[y][x] = ' ';                                 //    ||    ||
+                matrix[y][x] = ' ';                                 //    ||    ||
             }                                                       //    --------
-            MATRIX[y][0] = '|';
-            MATRIX[y][1] = '|';
-            MATRIX[y][SIDE_X - 1] = '|';
-            MATRIX[y][SIDE_X - 2] = '|';
+            matrix[y][0] = '|';
+            matrix[y][1] = '|';
+            matrix[y][SIDE_X - 1] = '|';
+            matrix[y][SIDE_X - 2] = '|';
         }
 
         for (int x = 0; x < SIDE_X; x++) {
-            MATRIX[SIDE_Y -1][x] = '-';
+            matrix[SIDE_Y -1][x] = '-';
         }
     }
 
-    //Check the MATRIX for the fill line and fill it with transitive symbols (for delete animation)
+    //Check the matrix for the fill line and fill it with transitive symbols (for delete animation)
     private static void checkTheMatrix() throws InterruptedException {
         // line counter for count how many scores you get
         int countOfFilledLine = 0;
@@ -138,7 +144,7 @@ public class PlayThread extends Thread {
             // Check the line from bottom to top line
             for (int x = 2; x < SIDE_X - 2; x++) {
                 // If find void square -> skip whole line
-                if (MATRIX[y][x] == ' ') {
+                if (matrix[y][x] == ' ') {
                     isLineFill = false;
                     y--;
                     break;
@@ -148,7 +154,7 @@ public class PlayThread extends Thread {
             if (isLineFill) {
                 // Fill whit transitive symbols (for animation)
                 for (int x = 2; x < SIDE_X - 2; x++) {
-                    MATRIX[y][x] = '.';
+                    matrix[y][x] = '.';
                 }
                 countOfFilledLine++;
                 // Waiting (for animation)
@@ -161,19 +167,17 @@ public class PlayThread extends Thread {
         //increase scores depending on countOfFilledLine
         switch (countOfFilledLine) {
             case 1:
-                score = score + 100;
+                score += 100;
                 break;
             case 2:
-                score = score + 200;
+                score += 200;
                 break;
             case 3:
-                score = score + 600;
+                score += 600;
                 break;
             case 4:
-                score = score + 800;
+                score += 800;
                 break;
-            default:
-                // do nothing
         }
     }
 
@@ -181,12 +185,12 @@ public class PlayThread extends Thread {
     private static void deleteTheLine(int line) {
         for (int y = line; y > 0 ; y--) {
             // Falling one square down a line
-            System.arraycopy(MATRIX[y - 1], 2, MATRIX[y], 2, SIDE_X - 2);
+            System.arraycopy(matrix[y - 1], 2, matrix[y], 2, SIDE_X - 2);
             Tetris.basicPanel.repaint();
             // Check next line for the void, if true = break
             int count = 0;
             for (int x = 2; x < SIDE_X - 2; x++) {
-                if (MATRIX[y - 1][x] != ' ') {
+                if (matrix[y - 1][x] != ' ') {
                     break;
                 } else
                     count++;
@@ -197,7 +201,7 @@ public class PlayThread extends Thread {
         }
     }
 
-    private static void fillNextTetriminos(){
+    public static void fillNextTetriminos(){
         char cross = ' ';
         for (int y = 0; y < 4; y++) {
             for (int x = 0; x < 4; x++) {

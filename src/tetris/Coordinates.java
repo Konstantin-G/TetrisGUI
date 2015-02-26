@@ -1,10 +1,12 @@
 package tetris;
 
+import java.io.Serializable;
+
 /**
  * Created by Konstantin Garkusha on 2/6/15.
  *
  */
-public class Coordinates {
+public class Coordinates implements Serializable{
     private int y;
     private int x;
 

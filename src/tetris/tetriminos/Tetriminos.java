@@ -3,12 +3,14 @@ package tetris.tetriminos;
 import tetris.Coordinates;
 import tetris.PlayThread;
 
+import java.io.Serializable;
+
 /**
  * Created by Konstantin Garkusha on 2/6/15.
  *
  */
-public abstract class Tetriminos implements Movable{
-
+public abstract class Tetriminos implements Serializable{
+    static final long serialVersionUID = 1L;
     final int COUNT_OF_SQUARE_BLOCKS = 4;
     public final char TETRIMINOS_CHAR;
     private boolean isDown;
@@ -22,6 +24,10 @@ public abstract class Tetriminos implements Movable{
         this.position = position;
         this.TETRIMINOS_CHAR = tetriminosChar;
         this.isDown = false;
+    }
+
+    public int getPosition() {
+        return position;
     }
 
     public int getOriginX() {
@@ -95,7 +101,7 @@ public abstract class Tetriminos implements Movable{
         for (int i = 0; i < this.COUNT_OF_SQUARE_BLOCKS; i++) {
             int x = this.coordinates[i].getX();
             int y = this.coordinates[i].getY();
-            if (PlayThread.MATRIX[y][x + 1] != ' ') {
+            if (PlayThread.matrix[y][x + 1] != ' ') {
                 return false;
             }
         }
@@ -108,7 +114,7 @@ public abstract class Tetriminos implements Movable{
         for (int i = 0; i < this.COUNT_OF_SQUARE_BLOCKS; i++) {
             int x = this.coordinates[i].getX();
             int y = this.coordinates[i].getY();
-            if (PlayThread.MATRIX[y][x - 1] != ' ') {
+            if (PlayThread.matrix[y][x - 1] != ' ') {
                 return false;
             }
         }
@@ -142,7 +148,7 @@ public abstract class Tetriminos implements Movable{
         for (Coordinates coordinate : this.coordinates) {
             int x = coordinate.getX();
             int y = coordinate.getY();
-            if (PlayThread.MATRIX[y + 1][x] != ' ') {
+            if (PlayThread.matrix[y + 1][x] != ' ') {
                 return true;
             }
         }

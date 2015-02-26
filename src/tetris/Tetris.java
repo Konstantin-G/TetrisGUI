@@ -3,8 +3,7 @@ package tetris;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 
@@ -121,11 +120,23 @@ public class Tetris extends JFrame{
     }
 
     private void loadGame(){
-        // will be
+        File file = new File("game.save");
+        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(file))){
+            new Serialization().readExternal(ois);
+        }catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+            System.err.println("IOException or ClassNotFoundException load");
+        }
     }
 
     private void saveGame(){
-        // will be
+        File file = new File("game.save");
+        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(file))){
+            new Serialization().writeExternal(oos);
+        }catch (IOException e) {
+            e.printStackTrace();
+            System.err.println("IOException save");
+        }
     }
 
     private void makeGUI(){
@@ -195,8 +206,8 @@ public class Tetris extends JFrame{
                 // Draw The Matrix
                 for (int y = 2; y < PlayThread.SIDE_Y - 1; y++) {
                     for (int x = 2; x < PlayThread.SIDE_X - 2; x++) {
-                        char cross = PlayThread.MATRIX[y][x];
-                        if (PlayThread.MATRIX[y][x] != ' '){
+                        char cross = PlayThread.matrix[y][x];
+                        if (PlayThread.matrix[y][x] != ' '){
                             switch (cross) {
                                 case '0' : g.setColor(Color.MAGENTA);
                                     break;
@@ -257,6 +268,13 @@ public class Tetris extends JFrame{
                 //Draw hide line
                 g.setColor(AREA_BACKGROUND_COLOR);
                 g.fillRect(START_X, 0, 220, 10);
+                if (isStopped){
+                    g.setXORMode(Color.white);
+                    g.setFont(PAUSE_FONT);
+                    g.drawString("PAUSE",18, 220);
+                    g.setPaintMode();
+                    setFont(defaultFont);
+                }
             }
 
         };
@@ -331,14 +349,8 @@ public class Tetris extends JFrame{
                 g.drawString("DOWN:", 10, 320);            g.drawString("CLOCKWISE ROTATION", 70, 320);
                 g.drawString("SPACE:", 10, 340);           g.drawString("DROP", 70, 340);
                 g.drawString("ESC:", 10, 360);             g.drawString("LEAVE THE GAME", 70, 360);
-                g.drawString("PAUSE:", 10, 380);           g.drawString("PAUSE THE GAME", 70, 380);
-                if (isStopped){
-                    g.setXORMode(Color.white);
-                    g.setFont(PAUSE_FONT);
-                    g.drawString("PAUSE",18, 220);
-                    g.setPaintMode();
-                    setFont(defaultFont);
-                }
+                g.drawString("\"P\":", 10, 380);           g.drawString("PAUSE THE GAME", 70, 380);
+
             }
         };
         rightPanel.add(rightTopPanel);
@@ -356,7 +368,7 @@ public class Tetris extends JFrame{
 
 
         setTitle("Tetris game by Konstantin Garkusha");
-//        pack();
+        pack();
         setSize(SCREEN_SIZE);
         setResizable(false);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -366,69 +378,6 @@ public class Tetris extends JFrame{
 
         defaultFont = getFont();
 
-
-//        JButton leftButton = new JButton("LEFT");
-//        leftButton.addActionListener(new ActionListener() {
-//            @Override
-//            public void actionPerformed(ActionEvent e) {
-//
-//            }
-//        });
-//        mainFrame.add(leftButton);
-//
-//        JButton rightButton = new JButton("RIGHT");
-//        rightButton.addActionListener(new ActionListener() {
-//            @Override
-//            public void actionPerformed(ActionEvent e) {
-//
-//            }
-//        });
-//        mainFrame.add(rightButton);
-
-//        JButton upButton = new JButton("ANTICLOCKWISE_ROTATION");
-//        upButton.addActionListener(new ActionListener() {
-//            @Override
-//            public void actionPerformed(ActionEvent e) {
-//
-//            }
-//        });
-//        mainFrame.add(upButton);
-//
-//        JButton downButton = new JButton("CLOCKWISE_ROTATION");
-//        downButton.addActionListener(new ActionListener() {
-//            @Override
-//            public void actionPerformed(ActionEvent e) {
-//
-//            }
-//        });
-//        mainFrame.add(downButton);
-//
-//        JButton spaceButton = new JButton("DROP");
-//        spaceButton.addActionListener(new ActionListener() {
-//            @Override
-//            public void actionPerformed(ActionEvent e) {
-//
-//            }
-//        });
-//        mainFrame.add(spaceButton);
-//
-//        JButton pauseButton = new JButton("PAUSE");
-//        pauseButton.addActionListener(new ActionListener() {
-//            @Override
-//            public void actionPerformed(ActionEvent e) {
-//
-//            }
-//        });
-//        mainFrame.add(pauseButton);
-//
-//        JButton escButton = new JButton("ESC");
-//        escButton.addActionListener(new ActionListener() {
-//            @Override
-//            public void actionPerformed(ActionEvent e) {
-//
-//            }
-//        });
-//        mainFrame.add(escButton);
 
         setVisible(true);
 
@@ -459,8 +408,11 @@ public class Tetris extends JFrame{
                         //If "SPACE" Drop down tetriminos
                     else if (e.getKeyCode() == KeyEvent.VK_SPACE)
                         PlayThread.dropDown();
-                        //If "PAUSE" pause the game
-                    else if (e.getKeyCode() == KeyEvent.VK_PAUSE) {
+                        //If "F1" start help menu
+                    else if (e.getKeyCode() == KeyEvent.VK_F1)
+                        helpFrame();
+                        //If "P" pause the game
+                    else if (e.getKeyCode() == KeyEvent.VK_P) {
                         if (!isStopped) {
                             isStopped = true;
                             playThread.suspend();

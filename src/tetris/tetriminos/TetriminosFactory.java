@@ -1,5 +1,8 @@
 package tetris.tetriminos;
 
+import tetris.PlayThread;
+
+import java.util.Collections;
 import java.util.Queue;
 import java.util.concurrent.ArrayBlockingQueue;
 
@@ -8,8 +11,17 @@ import java.util.concurrent.ArrayBlockingQueue;
  *
  */
 public class TetriminosFactory {
+    private static final TetriminosFactory TETRIMINOS_FACTORY = new TetriminosFactory();
+
     //Storing Tetriminos here
-    private static final Queue<Tetriminos> TETRIMINOS_QUEUE = new ArrayBlockingQueue<>(2);
+    private static final Queue<Tetriminos> TETRIMINOS_QUEUE = new ArrayBlockingQueue<>(3);
+
+    private TetriminosFactory() {
+    }
+
+    public static TetriminosFactory getTetriminosInstance() {
+        return TETRIMINOS_FACTORY;
+    }
 
     // Do we have Tetriminos in
     public boolean hasTetriminos() {
@@ -26,6 +38,16 @@ public class TetriminosFactory {
     //add first Tetriminos to queue
     public void addFirstTetriminos(){
         TETRIMINOS_QUEUE.add(getRandomFigure());
+    }
+
+    //add loaded Tetriminos to queue
+    public void addLoadedTetriminos(Tetriminos ... tetriminos){
+        TETRIMINOS_QUEUE.clear();
+        // add Tetriminos to queue
+        Collections.addAll(TETRIMINOS_QUEUE, tetriminos);
+        // refresh "next" field
+        PlayThread.fillNextTetriminos();
+        PlayThread.setFalling(getTetriminosFromTop());
     }
 
     // get next Tetriminos, which you can seen on display
@@ -49,7 +71,7 @@ public class TetriminosFactory {
             case 2:
                 return new L(randomPosition);
             case 3:
-                return new O();
+                return new O(0);
             case 4:
                 return new S(randomPosition);
             case 5:
@@ -60,4 +82,6 @@ public class TetriminosFactory {
                 throw new IllegalArgumentException("wrong random figure") ;
         }
     }
+
+
 }

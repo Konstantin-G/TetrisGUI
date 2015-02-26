@@ -21,11 +21,11 @@ class I extends Tetriminos {
 
     @Override
     protected synchronized void setPosition0(){
-        if (!(PlayThread.MATRIX[originY][this.originX + 2] != ' ' && PlayThread.MATRIX[originY][originX] != ' ')) {
-            if (PlayThread.MATRIX[originY][this.originX + 2] != ' ') {
+        if (!(PlayThread.matrix[originY][this.originX + 2] != ' ' && PlayThread.matrix[originY][originX] != ' ')) {
+            if (PlayThread.matrix[originY][this.originX + 2] != ' ') {
                 this.moveToLeft();
             }
-            if (PlayThread.MATRIX[originY][originX] != ' ') {
+            if (PlayThread.matrix[originY][originX] != ' ') {
                 this.moveToRight();
             }
             int index = 0;
@@ -40,14 +40,14 @@ class I extends Tetriminos {
 
     @Override
     protected synchronized void setPosition1(){
-        if (!(PlayThread.MATRIX[originY][originX + 3] != ' ' && PlayThread.MATRIX[originY][originX] != ' ')) {
-            if (PlayThread.MATRIX[originY][originX + 3] != ' ') {
+        if (!(PlayThread.matrix[originY][originX + 3] != ' ' && PlayThread.matrix[originY][originX] != ' ')) {
+            if (PlayThread.matrix[originY][originX + 3] != ' ') {
                 this.moveToLeft();
-                if (PlayThread.MATRIX[originY][originX + 3] != ' ') {
+                if (PlayThread.matrix[originY][originX + 3] != ' ') {
                     this.moveToLeft();
                 }
             }
-            if (PlayThread.MATRIX[originY][originX] != ' ') {
+            if (PlayThread.matrix[originY][originX] != ' ') {
                 this.moveToRight();
             }
             int index = 0;
