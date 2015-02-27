@@ -46,8 +46,7 @@ public class Tetris extends JFrame{
     }
 
     private void helpFrame(){
-        JFrame helpFrame = new JFrame();
-        helpFrame.setTitle("Help");
+        JFrame helpFrame = new JFrame("Help");
         // Text container
         JPanel textPanel = new JPanel(new BorderLayout());
         textPanel.setBorder(BorderFactory.createEmptyBorder(15,15,15,15));
@@ -61,11 +60,54 @@ public class Tetris extends JFrame{
         helpFrame.add(textPanel);
 
         // setup frame
+        helpFrame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
         helpFrame.setPreferredSize(SCREEN_SIZE);
         helpFrame.pack();
-        helpFrame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
         helpFrame.setVisible(true);
-        setLocationRelativeTo(null);
+        helpFrame.setLocationRelativeTo(null);
+    }
+
+    private void errorFrame(String error){
+        JFrame errorFrame = new JFrame("Error");
+        JPanel errorPanel = new JPanel(new BorderLayout());
+        errorPanel.setBorder(BorderFactory.createEmptyBorder(15,15,15,15));
+
+        // Text field
+        JLabel label = new JLabel(error);
+        label.setBorder(BorderFactory.createEmptyBorder(0,25,0,0));
+        errorPanel.add(label);
+        errorFrame.add(errorPanel);
+
+        // setup the frame
+        errorFrame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+        errorFrame.setPreferredSize(new Dimension(300, 150));
+        errorFrame.pack();
+        errorFrame.setVisible(true);
+        errorFrame.setResizable(false);
+        errorFrame.setLocationRelativeTo(null);
+    }
+
+    private void aboutTetrisFrame(){
+        JFrame helpFrame = new JFrame("About Tetris");
+        // Text container
+        JPanel textPanel = new JPanel(new BorderLayout());
+        textPanel.setBorder(BorderFactory.createEmptyBorder(15,15,15,15));
+        JTextPane textPane = new JTextPane();
+        textPane.setContentType("text/html");
+        String aboutTetris = PrepareInformation.getAboutTetris();
+        textPane.setText(aboutTetris);
+        textPane.setEditable(false);
+        // wrap JTextPane to the JScrollPane to add scrollable
+        JScrollPane jsp = new JScrollPane(textPane);
+        textPanel.add(jsp);
+        helpFrame.add(textPanel);
+
+        // setup frame
+        helpFrame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+        helpFrame.setPreferredSize(SCREEN_SIZE);
+        helpFrame.pack();
+        helpFrame.setVisible(true);
+        helpFrame.setLocationRelativeTo(null);
     }
 
     private void restartApp()
@@ -95,38 +137,22 @@ public class Tetris extends JFrame{
         }
     }
 
-    private void aboutTetrisFrame(){
-        JFrame helpFrame = new JFrame();
-        helpFrame.setTitle("About Tetris");
-        // Text container
-        JPanel textPanel = new JPanel(new BorderLayout());
-        textPanel.setBorder(BorderFactory.createEmptyBorder(15,15,15,15));
-        JTextPane textPane = new JTextPane();
-        textPane.setContentType("text/html");
-        String aboutTetris = PrepareInformation.getAboutTetris();
-        textPane.setText(aboutTetris);
-        textPane.setEditable(false);
-        // wrap JTextPane to the JScrollPane to add scrollable
-        JScrollPane jsp = new JScrollPane(textPane);
-        textPanel.add(jsp);
-        helpFrame.add(textPanel);
-
-        // setup frame
-        helpFrame.setPreferredSize(SCREEN_SIZE);
-        helpFrame.pack();
-        helpFrame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
-        helpFrame.setVisible(true);
-        setLocationRelativeTo(null);
-    }
 
     private void loadGame(){
         File file = new File("game.save");
         try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(file))){
             new Serialization().readExternal(ois);
-        }catch (IOException | ClassNotFoundException e) {
+        } catch (FileNotFoundException e) {
             e.printStackTrace();
-            System.err.println("IOException or ClassNotFoundException load");
+            errorFrame("File not found!");
+        } catch (IOException e) {
+            e.printStackTrace();
+            errorFrame("Saved file is not valid");
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+            errorFrame("Saved file have an error");
         }
+
     }
 
     private void saveGame(){
@@ -366,24 +392,18 @@ public class Tetris extends JFrame{
 
         basicPanel.add(rightPanel,  BorderLayout.EAST);
 
-
         setTitle("Tetris game by Konstantin Garkusha");
-        pack();
-        setSize(SCREEN_SIZE);
-        setResizable(false);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
+        setPreferredSize(SCREEN_SIZE);
+        pack();
+        setVisible(true);
         setLocationRelativeTo(null);
+        setResizable(false);
         setFocusable(true);
 
         defaultFont = getFont();
-
-
-        setVisible(true);
-
         playThread = new PlayThread();
         playThread.start();
-
 
         addKeyListener(new KeyAdapter() {
             @Override
