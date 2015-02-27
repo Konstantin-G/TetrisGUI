@@ -152,14 +152,11 @@ public class Tetris extends JFrame{
 
 
     private void loadGame(){
-        // create full address to file (Ubuntu won't right work without it)
         String loadFile = "game.save";
-        // get jar file path + filename
-        String loadPath =  Tetris.class.getProtectionDomain().getCodeSource().getLocation().toString();
-        // cut "file:" and replace "%20" with " "
-        loadPath = loadPath.substring(6).replaceAll("%20", " ");
-        // cut filename and add save file
-        String load = loadPath.substring(0, loadPath.lastIndexOf('/') + 1) + loadFile;
+        // create absolutePath to jar file (Ubuntu won't right work without it)
+        String savePath = getClass().getProtectionDomain().getCodeSource().getLocation().getPath();
+        savePath = savePath.substring(0, savePath.lastIndexOf("/"));
+        String load = savePath + File.separator+ loadFile;
 
         File file = new File(load);
         try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(file))){
@@ -178,14 +175,12 @@ public class Tetris extends JFrame{
     }
 
     private void saveGame(){
-        // create full address to file (Ubuntu won't right work without it)
         String saveFile = "game.save";
-        // get jar file path + filename
-        String savePath =  Tetris.class.getProtectionDomain().getCodeSource().getLocation().toString();
-        // cut "file:" and replace "%20" with " "
-        savePath = savePath.substring(6).replaceAll("%20", " ");
-        // cut filename and add save file
-        String save = savePath.substring(0, savePath.lastIndexOf('/') + 1) + saveFile;
+        // create absolutePath to jar file (Ubuntu won't right work without it)
+        String savePath = getClass().getProtectionDomain().getCodeSource().getLocation().getPath();
+        savePath = savePath.substring(0, savePath.lastIndexOf("/"));
+        String save = savePath + File.separator+ saveFile;
+
 
         File file = new File(save);
         try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(file))){
