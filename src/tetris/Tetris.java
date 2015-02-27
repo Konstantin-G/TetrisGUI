@@ -69,18 +69,33 @@ public class Tetris extends JFrame{
 
     private void errorFrame(String error){
         JFrame errorFrame = new JFrame("Error");
-        JPanel errorPanel = new JPanel(new BorderLayout());
-        errorPanel.setBorder(BorderFactory.createEmptyBorder(15,15,15,15));
-
+        JPanel basic = new JPanel();
+        basic.setLayout(new BoxLayout(basic, BoxLayout.Y_AXIS));
+        errorFrame.add(basic);
+        basic.add(Box.createVerticalGlue());
         // Text field
+        JPanel message = new JPanel();
+        message.setLayout(new FlowLayout(FlowLayout.LEFT));
         JLabel label = new JLabel(error);
-        label.setBorder(BorderFactory.createEmptyBorder(0,25,0,0));
-        errorPanel.add(label);
-        errorFrame.add(errorPanel);
+        label.setBorder(BorderFactory.createEmptyBorder(5,15,0,0));
+        message.add(label);
+        basic.add(message);
+
+        //Button field
+        JPanel button = new JPanel();
+        button.setLayout(new FlowLayout(FlowLayout.RIGHT));
+        JButton close = new JButton("Close");
+        // Listener, which will close error frame
+        close.addActionListener(e -> errorFrame.dispatchEvent(new WindowEvent(errorFrame, WindowEvent.WINDOW_CLOSING)));
+        button.add(close);
+        button.add(Box.createRigidArea(new Dimension(15, 0)));
+        basic.add(button);
+
+        basic.add(Box.createRigidArea(new Dimension(0,5)));
 
         // setup the frame
         errorFrame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
-        errorFrame.setPreferredSize(new Dimension(300, 150));
+        errorFrame.setPreferredSize(new Dimension(300, 120));
         errorFrame.pack();
         errorFrame.setVisible(true);
         errorFrame.setResizable(false);
