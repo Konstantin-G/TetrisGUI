@@ -7,8 +7,8 @@ import tetris.Coordinates;
  *
  */
 class O extends Tetriminos {
-    public O(int position) {
-        super(position, '3');
+    public O() {
+        super(0, '3');
         this.originX = 5;
         this.originY = 0;
         this.coordinates = new Coordinates[COUNT_OF_SQUARE_BLOCKS];

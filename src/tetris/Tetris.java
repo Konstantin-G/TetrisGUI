@@ -10,14 +10,11 @@ import java.util.ArrayList;
 /**
  *
  * Created by Konstantin Garkusha on 2/21/15.
- * ===============================
- * | Game is under construction! |
- * ===============================
  */
 
 public class Tetris extends JFrame{
     public static JPanel basicPanel;
-    static JPanel leftPanel;
+    private static JPanel leftPanel;
     private static JPanel rightPanel;
     private static JPanel rightTopPanel;
     static JPanel rightBottomPanel;
@@ -25,9 +22,9 @@ public class Tetris extends JFrame{
     private PlayThread playThread;
     private boolean isStopped = false;
 
-    private static final Dimension SCREEN_SIZE = new Dimension(500, 540);
+    private static final Dimension SCREEN_SIZE = new Dimension(560, 510);
 
-    private static final Font INFO_FONT = new Font("SHERIF", Font.BOLD, 12);
+    private static final Font INFO_FONT = new Font("VERDANA", Font.BOLD, 12);
     private static final Font PAUSE_FONT = new Font("SHERIF", Font.BOLD, 50);
     private Font defaultFont;
 
@@ -42,6 +39,7 @@ public class Tetris extends JFrame{
     }
 
     public static void main(String[] args) {
+        //noinspection Convert2MethodRef
         SwingUtilities.invokeLater(() -> new Tetris());
     }
 
@@ -137,7 +135,7 @@ public class Tetris extends JFrame{
                 return;
 
             // Build command: java -jar application.jar
-            final ArrayList<String> command = new ArrayList<String>();
+            final ArrayList<String> command = new ArrayList<>();
             command.add(javaBin);
             command.add("-jar");
             command.add(currentJar.getPath());
@@ -343,7 +341,7 @@ public class Tetris extends JFrame{
         /**RIGHT panel*/
         rightPanel = new JPanel();
         rightPanel.setLayout(new BoxLayout(rightPanel, BoxLayout.Y_AXIS));
-        rightPanel.add(Box.createRigidArea(new Dimension(260, 0)));
+        rightPanel.add(Box.createRigidArea(new Dimension(320, 0)));
             /**RIGHT TOP panel*/
         rightTopPanel = new JPanel(new FlowLayout()){
             @Override
@@ -426,6 +424,7 @@ public class Tetris extends JFrame{
         basicPanel.add(rightPanel,  BorderLayout.EAST);
 
         setTitle("Tetris game by Konstantin Garkusha");
+        //noinspection MagicConstant
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setPreferredSize(SCREEN_SIZE);
         pack();

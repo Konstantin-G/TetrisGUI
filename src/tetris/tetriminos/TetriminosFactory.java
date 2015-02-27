@@ -71,7 +71,7 @@ public class TetriminosFactory {
             case 2:
                 return new L(randomPosition);
             case 3:
-                return new O(0);
+                return new O();
             case 4:
                 return new S(randomPosition);
             case 5:

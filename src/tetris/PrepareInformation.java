@@ -6,7 +6,7 @@ import java.io.*;
  * Created by Konstantin Garkusha on 25.2.2015.
  *
  */
-public class PrepareInformation {
+class PrepareInformation {
     private static final String ABOUT_TETRIS = readAboutTetris();
     private static final String HELP = readHelp();
 

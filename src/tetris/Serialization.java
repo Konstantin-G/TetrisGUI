@@ -17,8 +17,8 @@ public class Serialization implements Externalizable {
     private static final TetriminosFactory TETRIMINOS_FACTORY = TetriminosFactory.getTetriminosInstance();
     private char[][] matrix;
     private int score;
-    Tetriminos falling;
-    Tetriminos next;
+    private Tetriminos falling;
+    private Tetriminos next;
 
     public Serialization() {
     }
