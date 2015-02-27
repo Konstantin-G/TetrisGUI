@@ -45,9 +45,9 @@ public class TetriminosFactory {
         TETRIMINOS_QUEUE.clear();
         // add Tetriminos to queue
         Collections.addAll(TETRIMINOS_QUEUE, tetriminos);
+        PlayThread.setFalling(getTetriminosFromTop());
         // refresh "next" field
         PlayThread.fillNextTetriminos();
-        PlayThread.setFalling(getTetriminosFromTop());
     }
 
     // get next Tetriminos, which you can seen on display
