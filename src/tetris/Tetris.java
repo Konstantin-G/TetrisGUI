@@ -174,9 +174,9 @@ public class Tetris extends JFrame{
         File file = new File("game.save");
         try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(file))){
             new Serialization().writeExternal(oos);
-        }catch (IOException e) {
+        } catch (IOException e) {
             e.printStackTrace();
-            System.err.println("IOException save");
+            errorFrame("Can't create save file!");
         }
     }
 
