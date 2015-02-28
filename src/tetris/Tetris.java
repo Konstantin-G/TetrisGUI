@@ -17,17 +17,18 @@ import java.util.ArrayList;
 public class Tetris extends JFrame{
     public static JPanel basicPanel;
     private static JPanel leftPanel;
+    @SuppressWarnings("FieldCanBeLocal")
     private static JPanel rightPanel;
     private static JPanel rightTopPanel;
-    static JPanel rightBottomPanel;
-    static Tetris tetris;
+    private static JPanel rightBottomPanel;
+
     private PlayThread playThread;
     private boolean isStopped = false;
 
     private static final Dimension SCREEN_SIZE = new Dimension(560, 510);
 
     private static final Font INFO_FONT = new Font("VERDANA", Font.BOLD, 12);
-    private static final Font PAUSE_FONT = new Font("SHERIF", Font.BOLD, 50);
+    private static final Font PAUSE_FONT = new Font("VERDANA", Font.BOLD, 50);
     private Font defaultFont;
 
     private static final Color AREA_BACKGROUND_COLOR = new Color(43, 43, 43);
@@ -169,7 +170,7 @@ public class Tetris extends JFrame{
         saveGame.addActionListener(e -> new Serialization().saveGame());
 
         JMenuItem mute = new JMenuItem("Mute");
-        mute.addActionListener(e -> SoundEffect.setVolume(SoundEffect.Volume.MUTE));
+        mute.addActionListener(e -> SoundEffect.mute());
 
         JMenuItem exit = new JMenuItem("Exit");
         exit.addActionListener(e -> System.exit(0));

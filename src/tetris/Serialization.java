@@ -6,7 +6,7 @@ import tetris.tetriminos.TetriminosFactory;
 import java.io.*;
 
 /**
- * Created by garkusha on 26.2.2015.
+ * Created by Konstantin Garkusha on 26.2.2015.
  * This class encapsulates all the serializations of a game, so as to separate the serializations
  * codes from the game codes.
  */

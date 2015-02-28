@@ -1,14 +1,7 @@
 package tetris;
 
 /**
- * Created by kashey on 2/28/15.
- *
- */
-import java.io.*;
-import java.net.URL;
-import javax.sound.sampled.*;
-
-/**
+ * Created by Konstantin Garkusha on 2/28/15.
  * This enum encapsulates all the sound effects of a game, so as to separate the sound playing
  * codes from the game codes.
  * Define all your sound effect names and the associated wave file.
@@ -17,6 +10,10 @@ import javax.sound.sampled.*;
  *    sound files, so that the play is not paused while loading the file for the first time.
  * You can use the static variable SoundEffect.volume to mute the sound.
  */
+import java.io.*;
+import java.net.URL;
+import javax.sound.sampled.*;
+
 public enum SoundEffect {
     DOWN("down.wav"),                          // Tetriminos is down
     ROW_COMPLETE("rowComplete.wav"),           // Then delete row
@@ -26,12 +23,14 @@ public enum SoundEffect {
     public static enum Volume {
         MUTE, LOW, MEDIUM, HIGH
     }
+    private static Volume volume = Volume.LOW;
 
-    public static void setVolume(Volume volume) {
-        SoundEffect.volume = volume;
+    public static void mute() {
+        if (volume == Volume.MUTE)
+            volume = Volume.LOW;
+        else
+            volume = Volume.MUTE;
     }
-
-    public static Volume volume = Volume.LOW;
 
     // Each sound effect has its own clip, loaded with its own sound file.
     private Clip clip;

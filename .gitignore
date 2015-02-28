@@ -1,27 +1,7 @@
-*.class
-*.save
-
-# Package Files #
-*.war
-*.ear
-*.jar
-
-
-# Eclipse
-.settings/
-.prefs
-*.prefs
-
 # Intellij
 .idea/
 *.iml
-*.iws
 src/META-INF
 
-# Mac
-.DS_Store
-
 # Maven
-log/
-target/
 out/

@@ -26,10 +26,6 @@ public abstract class Tetriminos implements Serializable{
         this.isDown = false;
     }
 
-    public int getPosition() {
-        return position;
-    }
-
     public int getOriginX() {
         return originX;
     }
@@ -40,10 +36,6 @@ public abstract class Tetriminos implements Serializable{
 
     public void setDown(boolean isDown) {
         this.isDown = isDown;
-    }
-
-    public boolean getDown() {
-        return isDown;
     }
 
     // rotate Tetriminos CLOCKWISE or ANTICLOCKWISE
