@@ -10,9 +10,8 @@ import java.util.Map;
 
 /**
  * Created by Konstantin Garkusha on 2/6/15.
- * ===============================
- * | Game is under construction! |
- * ===============================
+ * This main game class encapsulates all the logic of a game, so as to separate the logic
+ * codes from the game codes.
  */
 public class PlayThread extends Thread {
     private static final Map<Integer, Integer> LEVEL_SPEED = new HashMap<>(20);
@@ -93,6 +92,7 @@ public class PlayThread extends Thread {
                 falling.moveDownPerCell();
                 Tetris.basicPanel.repaint();
             }
+            SoundEffect.DOWN.play();
             //add fallen tetriminos to the matrix
             for (int coord = 0; coord < falling.coordinates.length; coord++) {
                 int x = falling.coordinates[coord].getX();
@@ -112,6 +112,7 @@ public class PlayThread extends Thread {
                 if (matrix[2][x] != ' ') {
                     // if have found stop the game and break the loop
                     isPlaying = false;
+                    SoundEffect.GAME_OVER.play();
                     break;
                 }
             }
@@ -160,6 +161,8 @@ public class PlayThread extends Thread {
                 // Waiting (for animation)
                 Tetris.basicPanel.repaint();
                 Thread.sleep(700);
+                // sound
+                SoundEffect.ROW_COMPLETE.play();
                 //  Delete the line and fall down all above this line
                 deleteTheLine(y);
             }

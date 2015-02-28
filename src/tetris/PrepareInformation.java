@@ -1,10 +1,12 @@
 package tetris;
 
 import java.io.*;
+import java.net.URL;
 
 /**
  * Created by Konstantin Garkusha on 25.2.2015.
- *
+ * This class encapsulates all the prepare information in the game, so as to separate the information
+ * codes from the game codes.
  */
 class PrepareInformation {
     private static final String ABOUT_TETRIS = readAboutTetris();
@@ -18,18 +20,11 @@ class PrepareInformation {
         return HELP;
     }
 
-    private static String getAbsolutePath(){
-        // create absolutePath to jar file (Ubuntu won't right work without it)
-        String savePath = Tetris.class.getProtectionDomain().getCodeSource().getLocation().getPath();
-        savePath = savePath.substring(0, savePath.lastIndexOf("/"));
-        return savePath + File.separator;
-    }
-
     private static String readAboutTetris(){
-        String load = getAbsolutePath() + "aboutTetris.html";
+        URL load = Tetris.class.getClassLoader().getResource("aboutTetris.html");
         String result ="";
         String line;
-        try(BufferedReader fileReader = new BufferedReader(new FileReader(load))) {
+        try(BufferedReader fileReader = new BufferedReader(new InputStreamReader(load.openStream()))) {
             while (null != (line = fileReader.readLine())){
                 result += line;
             }
@@ -41,10 +36,10 @@ class PrepareInformation {
     }
 
     private static String readHelp(){
-        String load = getAbsolutePath() + "help.html";
+        URL read = Tetris.class.getClassLoader().getResource("help.html");
         String result ="";
         String line;
-        try(BufferedReader fileReader = new BufferedReader(new FileReader(load))) {
+        try(BufferedReader fileReader = new BufferedReader(new InputStreamReader(read.openStream()))) {
             while (null != (line = fileReader.readLine())){
                 result += line;
             }

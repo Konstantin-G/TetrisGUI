@@ -7,7 +7,7 @@ import java.io.Serializable;
 
 /**
  * Created by Konstantin Garkusha on 2/6/15.
- *
+ * It's class super class for all Tetriminos
  */
 public abstract class Tetriminos implements Serializable{
     static final long serialVersionUID = 1L;

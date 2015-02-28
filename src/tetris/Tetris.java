@@ -1,5 +1,6 @@
 package tetris;
 
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -8,8 +9,9 @@ import java.net.URISyntaxException;
 import java.util.ArrayList;
 
 /**
- *
  * Created by Konstantin Garkusha on 2/21/15.
+ * This class encapsulates all the GUI of a game, so as to separate the GUI
+ * codes from the game codes.
  */
 
 public class Tetris extends JFrame{
@@ -65,7 +67,7 @@ public class Tetris extends JFrame{
         helpFrame.setLocationRelativeTo(null);
     }
 
-    private void errorFrame(String error){
+    public static void errorFrame(String error){
         JFrame errorFrame = new JFrame("Error");
         JPanel basic = new JPanel();
         basic.setLayout(new BoxLayout(basic, BoxLayout.Y_AXIS));
@@ -125,10 +127,9 @@ public class Tetris extends JFrame{
 
     private void restartApp()
     {
-
         final String javaBin = System.getProperty("java.home") + File.separator + "bin" + File.separator + "java";
         try {
-            final File currentJar = new File(Tetris.class.getProtectionDomain().getCodeSource().getLocation().toURI());
+            final File currentJar = new File(getClass().getProtectionDomain().getCodeSource().getLocation().toURI());
 
             // is it a jar file?
             if(!currentJar.getName().endsWith(".jar"))
@@ -143,51 +144,9 @@ public class Tetris extends JFrame{
             //build and start new command
             final ProcessBuilder builder = new ProcessBuilder(command);
             builder.start();
+            System.exit(0);
         } catch ( IOException | URISyntaxException e) {
             e.printStackTrace();
-        } finally {
-            System.exit(0);
-        }
-    }
-
-
-    private void loadGame(){
-        String loadFile = "game.save";
-        // create absolutePath to jar file (Ubuntu won't right work without it)
-        String savePath = getClass().getProtectionDomain().getCodeSource().getLocation().getPath();
-        savePath = savePath.substring(0, savePath.lastIndexOf("/"));
-        String load = savePath + File.separator+ loadFile;
-
-        File file = new File(load);
-        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(file))){
-            new Serialization().readExternal(ois);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-            errorFrame("File not found!");
-        } catch (IOException e) {
-            e.printStackTrace();
-            errorFrame("Saved file is not valid");
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-            errorFrame("Saved file have an error");
-        }
-
-    }
-
-    private void saveGame(){
-        String saveFile = "game.save";
-        // create absolutePath to jar file (Ubuntu won't right work without it)
-        String savePath = getClass().getProtectionDomain().getCodeSource().getLocation().getPath();
-        savePath = savePath.substring(0, savePath.lastIndexOf("/"));
-        String save = savePath + File.separator+ saveFile;
-
-
-        File file = new File(save);
-        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(file))){
-            new Serialization().writeExternal(oos);
-        } catch (IOException e) {
-            e.printStackTrace();
-            errorFrame("Can't create save file!");
         }
     }
 
@@ -204,10 +163,13 @@ public class Tetris extends JFrame{
         JMenu helpMenu = new JMenu("Help");
 
         JMenuItem loadGame = new JMenuItem("Load");
-        loadGame.addActionListener(e -> loadGame());
+        loadGame.addActionListener(e -> new Serialization().loadGame());
 
         JMenuItem saveGame = new JMenuItem("Save");
-        saveGame.addActionListener(e -> saveGame());
+        saveGame.addActionListener(e -> new Serialization().saveGame());
+
+        JMenuItem mute = new JMenuItem("Mute");
+        mute.addActionListener(e -> SoundEffect.setVolume(SoundEffect.Volume.MUTE));
 
         JMenuItem exit = new JMenuItem("Exit");
         exit.addActionListener(e -> System.exit(0));
@@ -223,6 +185,7 @@ public class Tetris extends JFrame{
 
         fileMenu.add(loadGame);
         fileMenu.add(saveGame);
+        fileMenu.add(mute);
         fileMenu.add(restart);
         helpMenu.add(help);
         helpMenu.add(info);
