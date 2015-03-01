@@ -3,8 +3,8 @@ package tetris;
 import java.io.Serializable;
 
 /**
- * Created by Konstantin Garkusha on 2/6/15.
  *
+ * @author Konstantin Garkusha
  */
 public class Coordinates implements Serializable{
     private int y;

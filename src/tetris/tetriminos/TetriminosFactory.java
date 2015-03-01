@@ -7,8 +7,9 @@ import java.util.Queue;
 import java.util.concurrent.ArrayBlockingQueue;
 
 /**
- * Created by Konstantin Garkusha on 12.2.2015.
  * This class create and store Tetriminos
+ *
+ * @author Konstantin Garkusha
  */
 public class TetriminosFactory {
     private static final TetriminosFactory TETRIMINOS_FACTORY = new TetriminosFactory();

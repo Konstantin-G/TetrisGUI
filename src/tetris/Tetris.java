@@ -2,6 +2,8 @@ package tetris;
 
 
 import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
@@ -9,11 +11,11 @@ import java.net.URISyntaxException;
 import java.util.ArrayList;
 
 /**
- * Created by Konstantin Garkusha on 2/21/15.
  * This class encapsulates all the GUI of a game, so as to separate the GUI
  * codes from the game codes.
+ *
+ * @author Konstantin Garkusha
  */
-
 public class Tetris extends JFrame{
     public static JPanel basicPanel;
     private static JPanel leftPanel;
@@ -21,6 +23,7 @@ public class Tetris extends JFrame{
     private static JPanel rightPanel;
     private static JPanel rightTopPanel;
     private static JPanel rightBottomPanel;
+    private static JSlider slider;
 
     private PlayThread playThread;
     private boolean isStopped = false;
@@ -169,8 +172,8 @@ public class Tetris extends JFrame{
         JMenuItem saveGame = new JMenuItem("Save");
         saveGame.addActionListener(e -> new Serialization().saveGame());
 
-        JMenuItem mute = new JMenuItem("Mute");
-        mute.addActionListener(e -> SoundEffect.mute());
+        JMenuItem muteMenu = new JMenuItem("Mute");
+        muteMenu.addActionListener(e -> slider.setValue(-30));
 
         JMenuItem exit = new JMenuItem("Exit");
         exit.addActionListener(e -> System.exit(0));
@@ -186,7 +189,7 @@ public class Tetris extends JFrame{
 
         fileMenu.add(loadGame);
         fileMenu.add(saveGame);
-        fileMenu.add(mute);
+        fileMenu.add(muteMenu);
         fileMenu.add(restart);
         helpMenu.add(help);
         helpMenu.add(info);
@@ -251,7 +254,7 @@ public class Tetris extends JFrame{
                     for (Coordinates c : PlayThread.getFalling().coordinates) {
                         int x = c.getX();
                         int y = c.getY();
-                        char cross = PlayThread.getFalling().TETRIMINOS_CHAR;
+                        char cross = null != PlayThread.getFalling() ? PlayThread.getFalling().TETRIMINOS_CHAR : ' ';
                         switch (cross) {
                             case '0':
                                 g.setColor(Color.MAGENTA);
@@ -371,14 +374,56 @@ public class Tetris extends JFrame{
         };
         rightPanel.add(rightTopPanel);
             /**RIGHT BOTTOM panel*/
-//        rightBottomPanel = new JPanel(new FlowLayout());
-//        JTextPane jTextPane= new JTextPane();
-//        jTextPane.setContentType("text/text");
-//        jTextPane.setText("Press F1 to help");
-//        jTextPane.setBackground(MATRIX_BACKGROUND_COLOR);
-//        jTextPane.setEditable(false);
-//        rightBottomPanel.add(jTextPane);
-//        rightPanel.add(rightBottomPanel);
+        rightBottomPanel = new JPanel(new FlowLayout());
+        rightBottomPanel.setBackground(AREA_BACKGROUND_COLOR);
+
+        slider = new JSlider(0, 150, 0);
+        slider.setBackground(AREA_BACKGROUND_COLOR);
+        slider.setFocusable(false);
+        slider.setMaximum(6);
+        slider.setMinimum(-30);
+        ImageIcon mute = new ImageIcon(this.getClass().getClassLoader().getResource("img" + File.separator + "mute.png"));
+        ImageIcon min = new ImageIcon(this.getClass().getClassLoader().getResource("img" + File.separator + "min.png"));
+        ImageIcon med = new ImageIcon(this.getClass().getClassLoader().getResource("img" + File.separator + "med.png"));
+        ImageIcon max = new ImageIcon(this.getClass().getClassLoader().getResource("img" + File.separator + "max.png"));
+
+        JLabel lbl = new JLabel(mute, JLabel.CENTER);
+        lbl.setIcon(med);
+        slider.addChangeListener(new ChangeListener() {
+            @Override
+            public void stateChanged(ChangeEvent event) {
+                int value = slider.getValue();
+                SoundEffect.setVolume(value);
+                if (value == -30) {
+                    lbl.setIcon(mute);
+                } else if (value > -30 && value <= -18) {
+                    lbl.setIcon(min);
+                } else if (value > -18 && value < -3) {
+                    lbl.setIcon(med);
+                } else {
+                    lbl.setIcon(max);
+                }
+            }
+        });
+
+        GroupLayout gl = new GroupLayout(rightBottomPanel);
+        rightBottomPanel.setLayout(gl);
+
+        gl.setAutoCreateContainerGaps(true);
+        gl.setAutoCreateGaps(true);
+
+        gl.setHorizontalGroup(gl.createSequentialGroup()
+                        .addComponent(slider)
+                        .addComponent(lbl)
+        );
+
+        gl.setVerticalGroup(gl.createParallelGroup()
+                        .addComponent(slider)
+                        .addComponent(lbl)
+        );
+
+        rightPanel.add(rightBottomPanel);
+
 
         basicPanel.add(rightPanel,  BorderLayout.EAST);
 

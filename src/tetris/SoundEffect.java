@@ -1,7 +1,6 @@
 package tetris;
 
 /**
- * Created by Konstantin Garkusha on 2/28/15.
  * This enum encapsulates all the sound effects of a game, so as to separate the sound playing
  * codes from the game codes.
  * Define all your sound effect names and the associated wave file.
@@ -9,27 +8,21 @@ package tetris;
  * You might optionally invoke the static method SoundEffect.init() to pre-load all the
  *    sound files, so that the play is not paused while loading the file for the first time.
  * You can use the static variable SoundEffect.volume to mute the sound.
+ *
+ * @author Konstantin Garkusha
  */
 import java.io.*;
 import java.net.URL;
 import javax.sound.sampled.*;
 
 public enum SoundEffect {
-    DOWN("down.wav"),                          // Tetriminos is down
-    ROW_COMPLETE("rowComplete.wav"),           // Then delete row
-    GAME_OVER("gameOver.au");                  // game over
+    DOWN("down.wav"),                           // Tetriminos is down
+    ROW_COMPLETE("rowComplete.wav"),            // Then delete row
+    GAME_OVER("gameOver.wav");                   // game over
+    private static float volume = 0.0f;       // from -30.0f to +6.0f
 
-    // Nested class for specifying volume
-    public static enum Volume {
-        MUTE, LOW, MEDIUM, HIGH
-    }
-    private static Volume volume = Volume.LOW;
-
-    public static void mute() {
-        if (volume == Volume.MUTE)
-            volume = Volume.LOW;
-        else
-            volume = Volume.MUTE;
+    public static void setVolume(int value) {
+        volume = value;
     }
 
     // Each sound effect has its own clip, loaded with its own sound file.
@@ -53,12 +46,12 @@ public enum SoundEffect {
 
     // Play or Re-play the sound effect from the beginning, by rewinding.
     public void play() {
-        if (volume != Volume.MUTE) {
-            if (clip.isRunning())
-                clip.stop();   // Stop the player if it is still running
-            clip.setFramePosition(0); // rewind to the beginning
-            clip.start();     // Start playing
-        }
+        if (clip.isRunning())
+            clip.stop();   // Stop the player if it is still running
+        clip.setFramePosition(0); // rewind to the beginning
+        FloatControl gainControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
+        gainControl.setValue(volume); // Reduce volume by XX decibels.
+        clip.start();     // Start playing
     }
 
     // Optional static method to pre-load all the sound files.

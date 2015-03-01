@@ -9,9 +9,10 @@ import java.util.Map;
 
 
 /**
- * Created by Konstantin Garkusha on 2/6/15.
  * This main game class encapsulates all the logic of a game, so as to separate the logic
  * codes from the game codes.
+ *
+ * @author Konstantin Garkusha
  */
 public class PlayThread extends Thread {
     private static final Map<Integer, Integer> LEVEL_SPEED = new HashMap<>(20);

@@ -3,8 +3,8 @@ package tetris.tetriminos;
 import tetris.Coordinates;
 
 /**
- * Created by Konstantin Garkusha on 2/6/15.
  *
+ * @author Konstantin Garkusha
  */
 class O extends Tetriminos {
     public O() {

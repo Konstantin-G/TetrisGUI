@@ -4,9 +4,10 @@ import java.io.*;
 import java.net.URL;
 
 /**
- * Created by Konstantin Garkusha on 25.2.2015.
  * This class encapsulates all the prepare information in the game, so as to separate the information
  * codes from the game codes.
+ *
+ * @author Konstantin Garkusha
  */
 class PrepareInformation {
     private static final String ABOUT_TETRIS = readAboutTetris();

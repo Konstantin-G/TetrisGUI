@@ -4,8 +4,8 @@ import tetris.Coordinates;
 import tetris.PlayThread;
 
 /**
- * Created by Konstantin Garkusha on 2/6/15.
  *
+ * @author Konstantin Garkusha
  */
 class J extends Tetriminos {
     public J(int position) {
