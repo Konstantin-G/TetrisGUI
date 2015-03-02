@@ -32,7 +32,7 @@ public enum SoundEffect {
     SoundEffect(String soundFileName) {
         try {
             // Use URL (instead of File) to read from disk and JAR.
-            URL url = this.getClass().getClassLoader().getResource("sound" + File.separator + soundFileName);
+            URL url = Tetris.class.getClassLoader().getResource("sound/" + soundFileName);
             // Set up an audio input stream piped from the sound file.
             AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(url);
             // Get a clip resource.

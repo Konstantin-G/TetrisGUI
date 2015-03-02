@@ -382,10 +382,10 @@ public class Tetris extends JFrame{
         slider.setFocusable(false);
         slider.setMaximum(6);
         slider.setMinimum(-30);
-        ImageIcon mute = new ImageIcon(this.getClass().getClassLoader().getResource("img" + File.separator + "mute.png"));
-        ImageIcon min = new ImageIcon(this.getClass().getClassLoader().getResource("img" + File.separator + "min.png"));
-        ImageIcon med = new ImageIcon(this.getClass().getClassLoader().getResource("img" + File.separator + "med.png"));
-        ImageIcon max = new ImageIcon(this.getClass().getClassLoader().getResource("img" + File.separator + "max.png"));
+        ImageIcon mute = new ImageIcon(this.getClass().getClassLoader().getResource("img/" + "mute.png"));
+        ImageIcon min = new ImageIcon(this.getClass().getClassLoader().getResource("img/" + "min.png"));
+        ImageIcon med = new ImageIcon(this.getClass().getClassLoader().getResource("img/" + "med.png"));
+        ImageIcon max = new ImageIcon(this.getClass().getClassLoader().getResource("img/" + "max.png"));
 
         JLabel lbl = new JLabel(mute, JLabel.CENTER);
         lbl.setIcon(med);
